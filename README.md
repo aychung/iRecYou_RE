@@ -44,7 +44,7 @@ The object of the project is to build a service that test efficiency of YouTube 
   - List of recommended videos
 
 ## Schema
-![alt text](docs/img/iRecYou_RE_diagram.png)
+![alt text](docs/img/Schema.png)
 
 ## Requirements
 
