@@ -1,0 +1,31 @@
+{
+  "name": "iRecYou_RE",
+  "version": "0.0.1",
+  "description": "iRecYou Recommendation Engine",
+  "main": "./server/index.js",
+  "dependencies": {
+    "elasticsearch": "^13.3.1",
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./recommender/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aychung/iRecYou_RE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aychung/iRecYou_RE/issues"
+  },
+  "homepage": "https://github.com/aychung/iRecYou_RE#readme"
+}

@@ -1,0 +1,6 @@
+public/dist/*
+server/views/*
+database/*.csv
+generator/*.txt
+node_modules/*
+.idae/*
