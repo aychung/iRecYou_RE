@@ -30,8 +30,8 @@ app.get('/rec_list/search/:query', (req, res) => {
   res.send(result);
 });
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 
-module.exports = app;
+module.exports = server;
