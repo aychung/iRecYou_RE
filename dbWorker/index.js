@@ -4,12 +4,13 @@ const AWS = require('../util/aws.js');
 
 class sqsWorker {
   // messageHanlder = (message, done) => {}
-  constructor (qUrl, messageHandler) {
+  constructor (qUrl, messageHandler, sqs = AWS.sqs) {
     this.worker = Consumer.create({
       queueUrl: qUrl,
       handleMessage: messageHandler,
       waitTimeSeconds: 0,
-      sqs: AWS.sqs,
+      batchSize: 10,
+      sqs: sqs,
     });
     this.worker.on('error', (err) => {
       console.log(err.message);
