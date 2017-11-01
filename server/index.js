@@ -1,33 +1,29 @@
 const express = require('express');
-// const RE = require('../recommender');
+const RE = require('../recommender');
 
 const app = express();
 
 app.get('/', (req, res) => {
-//  console.log('here');
   let result ='Hello World!';
   res.send(result);
 });
 
 app.get('/rec_list/vid/:id', (req, res) => {
-//  RE.recommenderListFromVid(req.params.id)
-//    .then(resp => {
-//      console.log(resp);
-//      res.send(resp);
-//    });
-  let result = {};
-  result[req.params.id] = [1,2,3,4];
-  res.send(result);
+  RE.rListFromVid(req.params.id)
+    .then(resp => {
+       let temp = {};
+       temp[req.params.id] = resp;
+       res.send(temp);
+    });
 });
 
 app.get('/rec_list/search/:query', (req, res) => {
-//  RE.recommenderListFromSearch(req.params.query)
-//    .then(resp => {
-//      res.send(resp);
-//    });
-  let result = {};
-  result[req.params.query] = [1,2,3,4];
-  res.send(result);
+   RE.rListFromSearch(req.params.query)
+    .then(resp => {
+      let temp = {};
+      temp[req.params.query] = resp;
+      res.send(temp);
+    });
 });
 
 const server = app.listen(3000, () => {

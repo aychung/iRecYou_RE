@@ -8,6 +8,7 @@
     "elasticsearch": "^13.3.1",
     "express": "^4.16.2",
     "pg": "^7.3.0",
+    "redis": "^2.8.0",
     "sequelize": "^4.20.1"
   },
   "devDependencies": {
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "node ./recommender/index.js"
+    "start": "node ./server/index.js"
   },
   "repository": {
     "type": "git",

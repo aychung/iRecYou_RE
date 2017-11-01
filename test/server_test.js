@@ -6,7 +6,9 @@ const should = chai.should();
 chai.use(chaiHttp);
 describe('server', () => {
   after(() => {
+    console.log('all test ended');
     server.close();
+    process.exit(1);
   });
 
   it('should return string on / GET', function(done) {
@@ -26,7 +28,6 @@ describe('server', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
-
           done();
         });
     });
@@ -37,7 +38,7 @@ describe('server', () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property(1);
-          res.body.should.have.property(1).eql([1,2,3,4]);
+          res.body.should.have.property(1).lengthOf(8);
           done();
         });
     });
@@ -50,7 +51,7 @@ describe('server', () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('hello');
-          res.body.should.have.property('hello').eql([1,2,3,4]);
+          res.body.should.have.property('hello').lengthOf(4);
           done();
         });
     });
