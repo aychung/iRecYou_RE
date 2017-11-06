@@ -4,25 +4,30 @@ const RE = require('../recommender');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  let result ='Hello World!';
+  res.send(result);
 });
 
 app.get('/rec_list/vid/:id', (req, res) => {
-  RE.recommenderListFromVid(req.params.id)
+  RE.rListFromVid(req.params.id)
     .then(resp => {
-      console.log(resp);
-      res.send(resp);
+       let temp = {};
+       temp[req.params.id] = resp;
+       res.send(temp);
     });
 });
 
 app.get('/rec_list/search/:query', (req, res) => {
-  RE.recommenderListFromSearch(req.params.query)
+   RE.rListFromSearch(req.params.query)
     .then(resp => {
-      res.send(resp);
+      let temp = {};
+      temp[req.params.query] = resp;
+      res.send(temp);
     });
 });
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 
+module.exports = server;

@@ -1,41 +1,36 @@
-const ES = require('../elasticsearch');
+//const ES = require('../elasticsearch');
 const db = require('../database');
 
-const recommenderListFromVid = (vidId) => {
-  return ES.esClient.search({
-    index: 'irecyou_re',
-    type: 'videos',
-    body: {
-      query: {
-        match: {
-          id: vidId,
-        },
-      },
-    },
-  }).then((body) => {
-    return ['rList from Vid', body.hits.hits];
-  }, (error) => {
-    console.trace(error.message);
-  });
+const rListFromVid = (vidId) => {
+  return db.Videos.count()
+    .then(c => {
+      const result = [];
+      while (result.length !== 8) {
+        let temp;
+        do {
+          temp = Math.floor(Math.random() * c);
+        } while (result.indexOf(temp) !== -1);
+        result.push(temp)
+      }
+      return result;
+    });
 };
 
-const recommenderListFromSearch = (query) => {
-  return ES.esClient.search({
-    index: 'irecyou_re',
-    type: 'videos',
-    body: {
-      query: {
-        match: {
-          title: query,
-        },
-      },
-    },
-  }).then((body) => {
-    return ['rList from search', body.hits.hits];
-  }, (error) => {
-    console.trace(error.message);
-  });
+const rListFromSearch = (query) => {
+
+  return db.Videos.count()
+    .then(c => {
+      const result = [];
+      while (result.length !== 4) {
+        let temp;
+        do {
+          temp = Math.floor(Math.random() * c);
+        } while (result.indexOf(temp) !== -1);
+        result.push(temp)
+      }
+      return result;
+    });
 };
 
-module.exports.recommenderListFromVid = recommenderListFromVid;
-module.exports.recommenderListFromSearch = recommenderListFromSearch;
+module.exports.rListFromVid = rListFromVid;
+module.exports.rListFromSearch = rListFromSearch;
