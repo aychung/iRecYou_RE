@@ -4,111 +4,109 @@ Things to do in aws console
 1. Setup Topic in SNS.
 2. Setup SQS to subscribe SNS topic.
 =========================
+
+Queue:
+search Query: https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou_RE_searchQuery
+user Action: https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou_RE_userAction
+
+Pub:
+recList: arn:aws:sns:us-west-1:587282304975:iRecYou_recsList
 */
 
 const AWS = require('aws-sdk');
-AWS.config.update({region:'us-west-1'});
+
+AWS.config.update({ region: 'us-west-1' });
 
 // Create SQS and SNS service object
-const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
-const sns = new AWS.SNS({apiVersion: '2010-03-31'});
+const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 
 const listQ = () => {
-  return new Promise ((resolve, reject) => {
-    sqs.listQueues({}, function(err, data) {
+  return new Promise((resolve, reject) => {
+    sqs.listQueues({}, (err, data) => {
       if (err) {
-        console.log("Error", err);
+        console.log('Error', err);
         reject(err);
       } else {
-        console.log("Success", data.QueueUrls);
+        console.log('Success', data.QueueUrls);
         resolve(data);
       }
     });
   });
-}
+};
 
-const getQUrl = (qName) => { 
-  return new Promise ((resolve, reject) => {
-      sqs.getQueueUrl({QueueName: qName}, function(err, data) {
+const getQUrl = (qName) => {
+  return new Promise((resolve, reject) => {
+    sqs.getQueueUrl({ QueueName: qName }, (err, data) => {
       if (err) {
-        console.log("Error", err);
+        console.log('Error', err);
         reject(err);
       } else {
-        console.log("Success", data.QueueUrl);
+        console.log('Success', data.QueueUrl);
         resolve(data.QueueUrl);
       }
     });
   });
-}
+};
 
 
 const pubMessage = (topic, message = {}, msgAttr = {}) => {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SNS.html#publish-property
-    var params = {
+    const params = {
       TopicArn: topic, // topic name
       Message: JSON.stringify(message), /* required */ // json object
       MessageAttributes: msgAttr,
-      /*
-      {
-        '<String>': {
-          DataType: 'STRING_VALUE', // required 
-          StringValue: 'STRING_VALUE',
-        },
-        // '<String>': ... 
-      },
-      */
     };
-    sns.publish(params, function(err, data) {
+    sns.publish(params, (err, data) => {
       if (err) {
         console.log(err, err.stack); // an error occurred
         reject(err);
-      }
-      else {
-        console.log(data);           // successful response
+      } else {
+        console.log(data); // successful response
         resolve(data);
       }
-    });  
+    });
   });
 };
 
 const deleteMessage = (qUrl, receiptHandle) => {
-  var deleteParams = {
+  const deleteParams = {
     QueueUrl: qUrl,
     ReceiptHandle: receiptHandle,
   };
- 
-  return new Promise ((resolve, reject) => {
-    sqs.deleteMessage(deleteParams, function(err, data) {
+
+  return new Promise((resolve, reject) => {
+    sqs.deleteMessage(deleteParams, (err, data) => {
       if (err) {
-        console.log("Delete Error", err);
+        console.log('Delete Error', err);
         reject(err);
       } else {
-        console.log("Message Deleted", data);
+        console.log('Message Deleted', data);
         resolve(data);
       }
-    });  
+    });
   });
 };
 
 const receiveMessage = (qUrl) => {  
   // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#receiveMessage-property
-  var params = {
+  const params = {
     QueueUrl: qUrl,
     AttributeNames: [
-      "All"
+      'All',
     ],
     MessageAttributeNames: [
-      "All"
+      'All',
     ],
     MaxNumberOfMessages: 1,
     VisibilityTimeout: 0,
-    WaitTimeSeconds: 0
+    WaitTimeSeconds: 0,
   };
-  return new Promise ((resolve, reject) => {
-    sqs.receiveMessage(params, function(err, data) {
+  return new Promise((resolve, reject) => {
+    sqs.receiveMessage(params, (err, data) => {
       if (err) {
-        console.log("Receive Error", err);
+        console.log('Receive Error', err);
         reject(err);
       } else {
         resolve(data);
@@ -116,9 +114,26 @@ const receiveMessage = (qUrl) => {
       }
     });
   });
-}
+};
 
-
+const sendMessageToQ = (msg) => {
+  const params = {
+    MessageBody: msg, /* required */
+    QueueUrl: 'https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou_RE_searchQuery', /* required */
+    DelaySeconds: 0,
+  };
+  return new Promise((resolve, reject) => {
+    sqs.sendMessage(params, (err, data) => {
+      if (err) {
+        console.log(err, err.stack); // an error occurred
+        reject(err);
+      } else {
+        console.log(data); // successful response
+        resolve(err);
+      }
+    });
+  });
+};
 
 // console.log('now publishing')
 // pubMessage('arn:aws:sns:us-west-1:587282304975:iRecYou_recsList', {'hello': 'world'})
@@ -132,12 +147,10 @@ const receiveMessage = (qUrl) => {
 //     console.log(e);
 //   });
 
-
-
 module.exports.sqs = sqs;
 module.exports.sns = sns;
 module.exports.listQ = listQ;
 module.exports.getQUrl = getQUrl;
 module.exports.pubMessage = pubMessage;
 module.exports.receiveMessage = receiveMessage;
-
+module.exports.sendMessageToQ = sendMessageToQ;
