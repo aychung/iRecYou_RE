@@ -1,11 +1,29 @@
-const db = require('../database/index.js');
+// const db = require('../database/index.js');
 const elasticsearch = require('elasticsearch');
 const {and, gte, lte} = require('sequelize').Op;
-
+const winston = require('winston');
+const WinstonES = require('winston-elasticsearch');
 
 const client = new elasticsearch.Client({
   host: '127.0.0.1:9200',
   // log: 'trace'
+});
+
+const esTransportOpts = {
+  level: 'info',
+  client,
+  mappingTemplate: './index-template-mapping.json',
+};
+
+const logger = new winston.Logger({
+  transports: [
+    new WinstonES(esTransportOpts),
+  ],
+});
+
+logger.emitErrs = true;
+logger.on('error', function (err) {
+  console.log(`> LOGGER ERROR: ${err}`);
 });
 
 const esPing = () => {
@@ -168,20 +186,10 @@ const indexAll = async () => {
   console.log('all finished');
 };
 
-// esPing();
-// esCreateIndex('irecyou_re');
-// esDelete('irecyou_re')
-// esIndexMappingVideos();
-// esIndexMappingUsers();
-// esIndexMappingLikes();
-// esIndexMappingCommentSentiments();
-// esBulkIndexVideos();
-// esBulkIndexUsers();
-// esBulkIndexLikes();
-// esBulkIndexCommentSentiments()
-//   .then(resp => console.log('finished'));
-// indexAll();
-
-
-
 module.exports.esClient = client;
+module.exports.logger = logger;
+module.exports.logger.stream = {
+  write: function(message, encoding){
+      logger.info(message);
+  }
+};

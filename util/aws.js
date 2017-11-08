@@ -14,6 +14,7 @@ recList: arn:aws:sns:us-west-1:587282304975:iRecYou_recsList
 */
 
 const AWS = require('aws-sdk');
+const Consumer = require('sqs-consumer');
 
 AWS.config.update({ region: 'us-west-1' });
 
@@ -135,6 +136,30 @@ const sendMessageToQ = (msg) => {
   });
 };
 
+class sqsWorker {
+  // messageHanlder = (message, done) => {}
+  constructor(qUrl, messageHandler, sqs = sqs) {
+    this.worker = Consumer.create({
+      queueUrl: qUrl,
+      handleMessage: messageHandler,
+      waitTimeSeconds: 20,
+      batchSize: 10,
+      sqs,
+    });
+    this.worker.on('error', (err) => {
+      console.log(err.message);
+    });
+  }
+
+  start() {
+    this.worker.start();
+  }
+
+  stop() {
+    this.worker.stop();
+  }
+}
+
 // console.log('now publishing')
 // pubMessage('arn:aws:sns:us-west-1:587282304975:iRecYou_recsList', {'hello': 'world'})
 //   .then(result => {
@@ -154,3 +179,5 @@ module.exports.getQUrl = getQUrl;
 module.exports.pubMessage = pubMessage;
 module.exports.receiveMessage = receiveMessage;
 module.exports.sendMessageToQ = sendMessageToQ;
+module.exports.sqsWorker = sqsWorker;
+

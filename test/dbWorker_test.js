@@ -1,4 +1,4 @@
-const dbWorker = require('../dbWorker');
+const dbWorker = require('../util/aws.js');
 var sinon = require('sinon');
 var assert = require('chai').assert;
 

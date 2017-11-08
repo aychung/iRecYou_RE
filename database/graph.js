@@ -99,7 +99,7 @@ const getRListFromQeury = (query) => {
     })
     return ret;
   }).catch(err => {
-    console.log(err);
+    console.log(`> getRListFromQeury ERROR: ${query},${err}`);
     session.close();
   });
 }

@@ -1,7 +1,8 @@
-const db = require('../database');
+// const db = require('../database');
 const graph = require('../database/graph.js');
 const cache = require('../cache');
 const statsd = require('../util/statsd.js');
+const logger = require('../logger').logger;
 
 const statsDclient = statsd.client;
 
@@ -19,6 +20,8 @@ const vidRListGraph = async (vidId) => {
         rList.push(temp);
       }
       statsDclient.increment('vidRList.cacheMiss');
+      logger.info('vidRList.cacheMiss', vidId);
+
       graph.getRListFromVidId(vidId)
         .then(newList => {
           while(newList.length < 8) {
@@ -31,6 +34,8 @@ const vidRListGraph = async (vidId) => {
         });
     } else {
       statsDclient.increment('vidRList.cacheHit');
+      logger.info('vidRList.cacheHit', vidId);
+
       rList = JSON.parse(rList);
     }
     statsDclient.increment('vidRList.totalCreated');
@@ -56,6 +61,8 @@ const queryRListGraph = async (query) => {
       }
 
       statsDclient.increment('queryRList.cacheMiss');
+      logger.info('queryRList.cacheMiss', query);
+
       graph.getRListFromQeury(query)
         .then(newList => {
           while(newList.length < 4) {
@@ -68,6 +75,8 @@ const queryRListGraph = async (query) => {
         });
     } else {
       statsDclient.increment('queryRList.cacheHit');
+      logger.info('queryRList.cacheHit', query);
+
       rList = JSON.parse(rList);
     }
     return rList;
