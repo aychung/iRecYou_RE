@@ -1,4 +1,4 @@
-const dbWorker = require('../dbWorker');
+const dbWorker = require('../util/aws.js');
 var sinon = require('sinon');
 var assert = require('chai').assert;
 
@@ -24,13 +24,6 @@ describe('dbWorker', function () {
     sqs._deleteMessage = sinon.stub().yieldsAsync(null);
     sqs.changeMessageVisibility = sinon.stub().yieldsAsync(null);
 
-    // consumer = new Consumer({
-    //   queueUrl: 'some-queue-url',
-    //   region: 'some-region',
-    //   handleMessage: handleMessage,
-    //   sqs: sqs,
-    //   authenticationErrorTimeout: 20
-    // });
     consumer = new dbWorker.sqsWorker('some-queue-url', handleMessage, sqs);
   });
 

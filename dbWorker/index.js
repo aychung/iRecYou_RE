@@ -1,43 +1,32 @@
-const Consumer = require('sqs-consumer');
 const AWS = require('../util/aws.js');
+const graph = require('../database/graph.js');
 
+const vidQUrl = '';
+const workers = [];
+const numWorkers = 1;
 
-class sqsWorker {
-  // messageHanlder = (message, done) => {}
-  constructor (qUrl, messageHandler, sqs = AWS.sqs) {
-    this.worker = Consumer.create({
-      queueUrl: qUrl,
-      handleMessage: messageHandler,
-      waitTimeSeconds: 0,
-      batchSize: 10,
-      sqs: sqs,
-    });
-    this.worker.on('error', (err) => {
-      console.log(err.message);
-    });
-  }
+class DbWorker extends AWS.sqsWorker {
+  constructor() {
+    const dbHandler = (message, done) => {
+      // TODO: check message format
+      if (message) {
+        const newVids = JSON.parse(message);
+        graph.addManyVideos(newVids);
+      }
 
-  start () {
-    this.worker.start();
-  }
-
-  stop () {
-    this.worker.stop();
+      done();
+    };
+    super(vidQUrl, dbHandler);
   }
 }
 
-// const w1 = new sqsWorker('https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou_RE_userAction', 
-//   (message, done) => {
-//     console.log('w1:', message.MessageId, message.Body);
-//     done();
-//   });
-// const w2 = new sqsWorker('https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou_RE_searchQuery', 
-//   (message, done) => {
-//     console.log('w2:', message.MessageId, message.Body);
-//     done();
-//   });
-// w1.start();
-// w2.start();
+const start = () => {
+  for (let i = 0; i < numWorkers; i += 1) {
+    const tempWorker = new DbWorker();
+    tempWorker.start();
+    workers.push(tempWorker);
+  }
+};
 
-module.exports.sqsWorker = sqsWorker;
-
+module.exports.workers = workers;
+module.exports.start = start;
