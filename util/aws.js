@@ -119,8 +119,8 @@ const receiveMessage = (qUrl) => {
 
 const sendMessageToQ = (msg) => {
   const params = {
-    MessageBody: msg, /* required */
-    QueueUrl: 'https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou_RE_searchQuery', /* required */
+    MessageBody: msg,
+    QueueUrl: 'https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou_RE_searchQuery', 
     DelaySeconds: 0,
   };
   return new Promise((resolve, reject) => {
@@ -137,7 +137,6 @@ const sendMessageToQ = (msg) => {
 };
 
 class sqsWorker {
-  // messageHanlder = (message, done) => {}
   constructor(qUrl, messageHandler, sqs = sqs) {
     this.worker = Consumer.create({
       queueUrl: qUrl,
@@ -160,18 +159,20 @@ class sqsWorker {
   }
 }
 
-// console.log('now publishing')
-// pubMessage('arn:aws:sns:us-west-1:587282304975:iRecYou_recsList', {'hello': 'world'})
-//   .then(result => {
-//     console.log('finished publishing and now receiveMessage from SQS');
-//     return receiveMessage('https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou');
-//   }).then(data => {
-//     console.log('message from SQS:');
-//     console.log(data);
-//   }).catch(e => {
-//     console.log(e);
-//   });
-
+const publish = () => {
+  console.log('now publishing')
+  pubMessage('arn:aws:sns:us-west-1:587282304975:iRecYou_recsList', {'hello': 'world'})
+  .then(result => {
+    console.log('finished publishing and now receiveMessage from SQS');
+    return receiveMessage('https://sqs.us-west-1.amazonaws.com/587282304975/iRecYou');
+  }).then(data => {
+    console.log('message from SQS:');
+    console.log(data);
+  }).catch(e => {
+    console.log(e);
+  });
+}
+  
 module.exports.sqs = sqs;
 module.exports.sns = sns;
 module.exports.listQ = listQ;
