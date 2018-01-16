@@ -10,12 +10,4 @@ client.on('error', (err) => {
   console.log(`Error ${err}`);
 });
 
-// client.setexAsync('key', 3600, 'some value')
-//   .then(result => {
-//     console.log('setex>', result);
-//     return client.getAsync('key');
-//   }).then(result => {
-//     console.log('get>', result);
-//   });
-
 module.exports.client = client;
