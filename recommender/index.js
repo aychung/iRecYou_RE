@@ -1,4 +1,3 @@
-// const db = require('../database');
 const graph = require('../database/graph.js');
 const cache = require('../cache');
 const statsd = require('../util/statsd.js');
