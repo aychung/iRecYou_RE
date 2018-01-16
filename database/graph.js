@@ -12,7 +12,6 @@ const addManyUsers = (users) => {
     { users: users }
   )
   .then(result => result)
-  // ).then(result => console.log(result))
   .catch(err => {
     console.log(err);
     session.close();
@@ -26,7 +25,6 @@ const addManyVideos = (videos) => {
      RETURN v`,
      { videos : videos }
   ).then(result => result)
-  // ).then(result => console.log(result))
   .catch(err => {
     console.log(err);
     session.close();
@@ -40,7 +38,6 @@ const batchLikes = (likes) => {
      MERGE (a)-[:LIKES]->(b)
      RETURN a`,
      { likes: likes }
-  // ).then(result => console.log(result))
   ).then(result => result)
   .catch(err => {
     console.log(err);
@@ -55,7 +52,6 @@ const batchComments = (commentSentiments) => {
      MERGE (a)-[:COMMENTED {sentiment: cs.sentiment}]->(b)
      RETURN a`,
      { commentSentiments: commentSentiments }
-  // ).then(result => console.log(result))
   ).then(result => result)
   .catch(err => {
     console.log(err);
@@ -111,4 +107,3 @@ module.exports.batchComments = batchComments;
 module.exports.session = session;
 module.exports.getRListFromVidId = getRListFromVidId;
 module.exports.getRListFromQeury = getRListFromQeury;
-

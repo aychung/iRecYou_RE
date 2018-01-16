@@ -57,17 +57,6 @@ const CommentSentiments = sequelize.define('comment_sentiment', {
   timestamps: false,
 });
 
-// Users.belongsToMany(Videos, {as: 'LikeVids', through: Likes, foreignKey: u_id});
-// Videos.belongsToMany(Users, {as: 'Likers', through: Likes, foreignKey: vid_id});
-// Users.belongsToMany(Videos, {as: 'CommentedVids', through: commentSentiments, foreignKey: u_id});
-// Videos.belongsToMany(Users, {as: 'Commenters', through: commentSentiments, foreignKey: vid_id});
-
-// Users.belongsToMany(Videos, {as: 'LikeVids', through: Likes});
-// Videos.belongsToMany(Users, {as: 'Likers', through: Likes});
-// Users.belongsToMany(Videos, {as: 'CommentedVids', through: CommentSentiments});
-// Videos.belongsToMany(Users, {as: 'Commenters', through: CommentSentiments});
-
-
 const saveVideos = (vidInfo) => {
   return Videos.create(vidInfo);
 }
