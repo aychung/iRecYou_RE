@@ -1,4 +1,3 @@
-// const db = require('../database/index.js');
 const elasticsearch = require('elasticsearch');
 const {and, gte, lte} = require('sequelize').Op;
 const winston = require('winston');
@@ -6,7 +5,7 @@ const WinstonES = require('winston-elasticsearch');
 
 const client = new elasticsearch.Client({
   host: '127.0.0.1:9200',
-  // log: 'trace'
+  log: 'trace'
 });
 
 const esTransportOpts = {
