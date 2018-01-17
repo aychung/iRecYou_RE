@@ -2,7 +2,7 @@
 
 iRecYou Video: Recommendation Engine is a self-contained and scalable web service built for iRecYou system, a video search / recommendation application built in microservice-based architecture.
 
-# Table of Contents
+## Table of Contents
 
 1. [Features](#iRecYou)
 1. [Development](#Development)
